@@ -1,5 +1,4 @@
 package com.semicolon.artisanhub.data.model;
-
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -60,5 +59,4 @@ public class User {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "workmanship")
     private List<Reviews> reviews;
-
 }
