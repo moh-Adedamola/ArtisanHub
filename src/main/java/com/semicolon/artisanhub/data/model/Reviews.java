@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -14,25 +15,25 @@ public class Reviews {
     @Id
     private Long id;
 
-    @Column(nullable = false,length = 100)
+
     private int rating;
 
-    @Column(nullable = false,length = 100)
+
     private String comment;
 
 
-    @Column(nullable = false)
+
     private LocalDate createDate;
 
     private LocalDate updateDate;
 
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private StatusReview statusReview;
 
     @ManyToOne
     @JoinColumn(name = "workmanship_id", nullable = false)
     private User workmanship;
+
 
 }

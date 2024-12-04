@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 @Entity
+
 public class SpecializationArea {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Id

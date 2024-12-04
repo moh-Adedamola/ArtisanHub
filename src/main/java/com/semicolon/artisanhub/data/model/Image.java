@@ -1,6 +1,7 @@
 package com.semicolon.artisanhub.data.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,20 +13,21 @@ public class Image {
     @Id
     private Long id;
 
-    @Column(nullable = false)
+    @NotBlank(message = "ïmage link cannot be empty pls input a URL for it")
     private String imageUrl;
 
-    @Column(nullable = false)
+    @NotBlank(message = "pls input a value for the description of ALT")
     private String altText;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @NotBlank(message = "pls select a image type")
     private Format_Image format;
 
-    @Column(nullable = false)
     private Long size;
 
-    @OneToOne
+
+
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 }
