@@ -4,10 +4,8 @@ import com.semicolon.artisanhub.data.model.RolesUser;
 import com.semicolon.artisanhub.data.model.User;
 import com.semicolon.artisanhub.data.repository.UserRepository;
 import com.semicolon.artisanhub.dto.request.LoginWorkmanshipRequest;
-import com.semicolon.artisanhub.dto.request.RegisterUserClientRequest;
 import com.semicolon.artisanhub.dto.request.RegisterWorkmanshipRequest;
 import com.semicolon.artisanhub.dto.response.LoginWorkmanshipResponse;
-import com.semicolon.artisanhub.dto.response.RegisterUserClientResponse;
 import com.semicolon.artisanhub.dto.response.RegisterWorkmanshipResponse;
 import com.semicolon.artisanhub.exceptions.InvalidLoginException;
 import com.semicolon.artisanhub.exceptions.UsersAlreadyExistExceptions;
@@ -20,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServicesImplementation implements UsersInterface{
+public class UserServicesImplementation implements UsersServices {
     @Autowired
     private UserRepository userRepository;
 
@@ -34,6 +32,8 @@ public class UserServicesImplementation implements UsersInterface{
         this.mapper = mapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public RegisterWorkmanshipResponse RegisterWorkmanship(RegisterWorkmanshipRequest request)  {
@@ -43,6 +43,13 @@ public class UserServicesImplementation implements UsersInterface{
         newUser.setRolesUser(RolesUser.WORKMANSHIP);
         newUser.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         newUser = userRepository.save(newUser);
+
+        notificationService.sendNotification(
+                newUser.getEmail(),
+                "Registration Successful",
+                "Dear " + newUser.getUserName() + ", you have successfully registered as a workmanship." +
+                        "We are glad to have you in into our society And Welcome to ArtisanHub Platform and we hope too see more of your recommendations in our platform"
+        );
         RegisterWorkmanshipResponse response = mapper.map(newUser, RegisterWorkmanshipResponse.class);
         response.setMessage("You have successfully registered as a workmanship");
 
@@ -91,29 +98,26 @@ public class UserServicesImplementation implements UsersInterface{
     }
 
     @Override
-    public List<User> findWorkmanshipByCity(String city) {
-        return userRepository.findByCityAndRolesUser(city, RolesUser.WORKMANSHIP);
+    public List<User> findWorkmanshipByAddress(String Address) {
+        return userRepository.findByAddressAndRolesUser(Address, RolesUser.WORKMANSHIP);
     }
 
     @Override
-    public RegisterUserClientResponse registerUserClient(RegisterUserClientRequest registerUserClientRequest) {
-//        validateRegisterRequest(registerUserRequest);
-//        validateEmail(registerUserRequest.getEmail());
-//
-        User userClient = new User();
-        userClient.setName(registerUserClientRequest.getName());
-        userClient.setEmail(registerUserClientRequest.getEmail());
-        userClient.setPassword(bCryptPasswordEncoder.encode(registerUserClientRequest.getPassword()));
-        userClient.setPhoneNumber(registerUserClientRequest.getPhoneNumber());
-        userClient.setPassword(registerUserClientRequest.getPassword());
-        userClient.setUserName(registerUserClientRequest.getUserName());
-        userClient.setAddress(registerUserClientRequest.getAddress());
-        userClient.setCity(registerUserClientRequest.getCity());
-        userClient.setState(registerUserClientRequest.getState());
-        userClient.setRolesUser(RolesUser.NORMAL_USER);
-        userRepository.save(userClient);
-        RegisterUserClientResponse registerUserClientResponse = new RegisterUserClientResponse();
-        registerUserClientResponse.setMessage("Registration successful");
-        return registerUserClientResponse;
+    public List<User> getUserList() {
+        return userRepository.findByRolesUser(RolesUser.NORMAL_USER);
     }
+
+    @Override
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (user.getRolesUser() == RolesUser.WORKMANSHIP) {
+            userRepository.delete(user);
+        }
+        else {
+            throw new RuntimeException("User is not a workmanship");
+        }
+    }
+
+
 }

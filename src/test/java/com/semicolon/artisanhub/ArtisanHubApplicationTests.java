@@ -29,7 +29,7 @@ class ArtisanHubApplicationTests {
         response.setMessage("You have successfully registered as a workmanship");
         assertNotNull(response, "Response should not be null");
         assertEquals("You have successfully registered as a workmanship", response.getMessage());
-        assertEquals(request.getCity(), response.getCity());
+
         assertEquals(request.getAddress(), response.getAddress());
         assertEquals(request.getPhoneNumber(), response.getPhoneNumber());
         assertEquals(request.getEmail(), response.getEmail());
@@ -43,8 +43,7 @@ class ArtisanHubApplicationTests {
         request.setPassword("123456");
         request.setPhoneNumber("08134567890");
         request.setAddress("sabo yaba 12 herbert marculey");
-        request.setCity("Sabo Yaba");
-        request.setState("Lagos");
+
         request.setUserName("Obaturn");
         request.setRolesUser(RolesUser.WORKMANSHIP);
         return request;

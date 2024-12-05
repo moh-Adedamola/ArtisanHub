@@ -1,14 +1,12 @@
 package com.semicolon.artisanhub;
 
 import com.semicolon.artisanhub.data.model.Format_Image;
-import com.semicolon.artisanhub.data.model.Image;
-import com.semicolon.artisanhub.data.repository.UserRepository;
 import com.semicolon.artisanhub.dto.request.ImageRequest;
 import com.semicolon.artisanhub.dto.request.RegisterWorkmanshipRequest;
 import com.semicolon.artisanhub.dto.response.ImageResponse;
 import com.semicolon.artisanhub.dto.response.RegisterWorkmanshipResponse;
 import com.semicolon.artisanhub.services.ImageServices;
-import com.semicolon.artisanhub.services.UsersInterface;
+import com.semicolon.artisanhub.services.UsersServices;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +23,7 @@ public class ImageTest {
     private ImageServices images;
 
     @Autowired
-     private UsersInterface usersInterface;
+     private UsersServices usersInterface;
 
 
 
@@ -39,8 +37,7 @@ public class ImageTest {
         registerRequest.setPassword("passwords");
         registerRequest.setUserName("johndan");
         registerRequest.setAddress("123 Main St");
-        registerRequest.setCity("Cityville");
-        registerRequest.setState("Stateville");
+
 
         RegisterWorkmanshipResponse registerResponse = usersInterface.RegisterWorkmanship(registerRequest);
 
