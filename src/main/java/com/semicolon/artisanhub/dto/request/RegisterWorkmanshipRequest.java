@@ -34,12 +34,6 @@ public class RegisterWorkmanshipRequest {
     @NotBlank(message = "address cannot be empty pls input your address")
     private String address;
 
-    @NotBlank(message = "City cannot be empty pls input your city ")
-    private String city;
-
-    @NotBlank(message = "state cannot be empty pls input a state ")
-    private String state;
-
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER,mappedBy = "user")
     private Image profilePicture;
 

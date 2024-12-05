@@ -22,28 +22,23 @@ public class User {
     private String name;
 
     @Email(message = "Email is empty pls input the correct email")
-    @Column( unique = true)
+    @Column(unique = true)
     private String email;
 
     @NotBlank(message = "phone number cannot be empty pls input your phoneNumber")
-    @Column( length = 11)
+    @Column(length = 11)
     private String phoneNumber;
 
     @NotBlank(message = "password cannot be empty pls input your password")
     private String password;
 
     @NotBlank(message = "username cannot be empty pls input your username")
-    @Column( unique = true)
+    @Column(unique = true)
     private String userName;
 
     @NotBlank(message = "address cannot be empty pls input your address")
     private String address;
 
-    @NotBlank(message = "City cannot be empty pls input your city ")
-    private String city;
-
-    @NotBlank(message = "state cannot be empty pls input a state ")
-    private String state;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<Image> images = new ArrayList<>();
@@ -55,6 +50,4 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user")
     private List<SpecializationArea> specializationArea;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "workmanship")
-    private List<Reviews> reviews;
 }

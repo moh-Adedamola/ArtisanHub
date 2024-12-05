@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServicesImplementation implements UsersInterface{
+public class UserServicesImplementation implements UsersServices {
     @Autowired
     private UserRepository userRepository;
 
@@ -32,6 +32,8 @@ public class UserServicesImplementation implements UsersInterface{
         this.mapper = mapper;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public RegisterWorkmanshipResponse RegisterWorkmanship(RegisterWorkmanshipRequest request)  {
@@ -41,6 +43,13 @@ public class UserServicesImplementation implements UsersInterface{
         newUser.setRolesUser(RolesUser.WORKMANSHIP);
         newUser.setPassword(bCryptPasswordEncoder.encode(request.getPassword()));
         newUser = userRepository.save(newUser);
+
+        notificationService.sendNotification(
+                newUser.getEmail(),
+                "Registration Successful",
+                "Dear " + newUser.getUserName() + ", you have successfully registered as a workmanship." +
+                        "We are glad to have you in into our society And Welcome to ArtisanHub Platform and we hope too see more of your recommendations in our platform"
+        );
         RegisterWorkmanshipResponse response = mapper.map(newUser, RegisterWorkmanshipResponse.class);
         response.setMessage("You have successfully registered as a workmanship");
 
@@ -89,7 +98,26 @@ public class UserServicesImplementation implements UsersInterface{
     }
 
     @Override
-    public List<User> findWorkmanshipByCity(String city) {
-        return userRepository.findByCityAndRolesUser(city, RolesUser.WORKMANSHIP);
+    public List<User> findWorkmanshipByAddress(String Address) {
+        return userRepository.findByAddressAndRolesUser(Address, RolesUser.WORKMANSHIP);
     }
+
+    @Override
+    public List<User> getUserList() {
+        return userRepository.findByRolesUser(RolesUser.NORMAL_USER);
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        if (user.getRolesUser() == RolesUser.WORKMANSHIP) {
+            userRepository.delete(user);
+        }
+        else {
+            throw new RuntimeException("User is not a workmanship");
+        }
+    }
+
+
 }

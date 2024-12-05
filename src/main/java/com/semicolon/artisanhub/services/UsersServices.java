@@ -8,9 +8,11 @@ import com.semicolon.artisanhub.dto.response.RegisterWorkmanshipResponse;
 
 import java.util.List;
 
-public interface UsersInterface {
+public interface UsersServices {
     RegisterWorkmanshipResponse RegisterWorkmanship(RegisterWorkmanshipRequest request);
     LoginWorkmanshipResponse LoginWorkmanship(LoginWorkmanshipRequest request);
     User getUserById(Long id);
-    List<User> findWorkmanshipByCity(String city);
+    List<User> findWorkmanshipByAddress(String Address);
+    List<User> getUserList();
+    void deleteUser(Long id);
 }

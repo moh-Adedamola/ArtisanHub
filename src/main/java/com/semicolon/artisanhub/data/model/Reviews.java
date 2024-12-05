@@ -27,13 +27,8 @@ public class Reviews {
 
     private LocalDate updateDate;
 
-
     @Enumerated(EnumType.STRING)
     private StatusReview statusReview;
 
-    @ManyToOne
-    @JoinColumn(name = "workmanship_id", nullable = false)
-    private User workmanship;
-
-
+    private RolesUser rolesUser;
 }
