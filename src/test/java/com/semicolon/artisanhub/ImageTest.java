@@ -42,25 +42,20 @@ public class ImageTest {
         registerRequest.setCity("Cityville");
         registerRequest.setState("Stateville");
 
-        // Call the RegisterWorkmanship method to register the user
         RegisterWorkmanshipResponse registerResponse = usersInterface.RegisterWorkmanship(registerRequest);
 
-        // Ensure the user was successfully registered
         assertNotNull(registerResponse);
         assertEquals("You have successfully registered as a workmanship", registerResponse.getMessage());
 
-        // Step 2: Create an ImageRequest using the registered user's Id
         ImageRequest imageRequest = new ImageRequest();
         imageRequest.setImageUrl("http://example.com/image.jpg");
         imageRequest.setSize(200L);
         imageRequest.setFormat(Format_Image.GIF);
         imageRequest.setAltText("Picture of a man");
-        imageRequest.setUserId(registerResponse.getId());  // Use the ID from the registered user
+        imageRequest.setUserId(registerResponse.getId());
 
-        // Step 3: Upload the image
         ImageResponse imageResponse = images.UploadImage(imageRequest);
 
-        // Step 4: Assertions
         assertNotNull(imageResponse);
         assertEquals("Picture uploaded successfully", imageResponse.getMessage());
         assertEquals("Picture of a man", imageResponse.getAltText());

@@ -4,8 +4,10 @@ import com.semicolon.artisanhub.data.model.RolesUser;
 import com.semicolon.artisanhub.data.model.User;
 import com.semicolon.artisanhub.data.repository.UserRepository;
 import com.semicolon.artisanhub.dto.request.LoginWorkmanshipRequest;
+import com.semicolon.artisanhub.dto.request.RegisterUserClientRequest;
 import com.semicolon.artisanhub.dto.request.RegisterWorkmanshipRequest;
 import com.semicolon.artisanhub.dto.response.LoginWorkmanshipResponse;
+import com.semicolon.artisanhub.dto.response.RegisterUserClientResponse;
 import com.semicolon.artisanhub.dto.response.RegisterWorkmanshipResponse;
 import com.semicolon.artisanhub.exceptions.InvalidLoginException;
 import com.semicolon.artisanhub.exceptions.UsersAlreadyExistExceptions;
@@ -91,5 +93,27 @@ public class UserServicesImplementation implements UsersInterface{
     @Override
     public List<User> findWorkmanshipByCity(String city) {
         return userRepository.findByCityAndRolesUser(city, RolesUser.WORKMANSHIP);
+    }
+
+    @Override
+    public RegisterUserClientResponse registerUserClient(RegisterUserClientRequest registerUserClientRequest) {
+//        validateRegisterRequest(registerUserRequest);
+//        validateEmail(registerUserRequest.getEmail());
+//
+        User userClient = new User();
+        userClient.setName(registerUserClientRequest.getName());
+        userClient.setEmail(registerUserClientRequest.getEmail());
+        userClient.setPassword(bCryptPasswordEncoder.encode(registerUserClientRequest.getPassword()));
+        userClient.setPhoneNumber(registerUserClientRequest.getPhoneNumber());
+        userClient.setPassword(registerUserClientRequest.getPassword());
+        userClient.setUserName(registerUserClientRequest.getUserName());
+        userClient.setAddress(registerUserClientRequest.getAddress());
+        userClient.setCity(registerUserClientRequest.getCity());
+        userClient.setState(registerUserClientRequest.getState());
+        userClient.setRolesUser(RolesUser.NORMAL_USER);
+        userRepository.save(userClient);
+        RegisterUserClientResponse registerUserClientResponse = new RegisterUserClientResponse();
+        registerUserClientResponse.setMessage("Registration successful");
+        return registerUserClientResponse;
     }
 }
